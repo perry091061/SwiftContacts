@@ -12,9 +12,11 @@ import Contacts
 class DataModel
 {
     var contacts : [CNContact]?
+    var callback:([CNContact])->()?
     
-    init()
+    init(callback:@escaping ([CNContact])->())
     {
+        self.callback = callback
         let store = CNContactStore()
         
         if CNContactStore.authorizationStatus(for: .contacts) == .notDetermined
@@ -39,6 +41,7 @@ class DataModel
         let containerId = store.defaultContainerIdentifier()
         let predicate = CNContact.predicateForContactsInContainer(withIdentifier: containerId)
         contacts = try? store.unifiedContacts(matching: predicate, keysToFetch: keysTofetch)
- 
+        callback(contacts ?? [])
+        
     }
 }

@@ -8,22 +8,23 @@
 
 import UIKit
 import Contacts
+import CoreData
 
 class TableViewController: UITableViewController {
+    
+    var model : DataModel!
+    var contacts: [CNContact]?
     
     @IBAction func buttonPressed(_ sender: UIButton) {
     }
     
     
-    var contacts:[CNContact] = [] {
-        didSet{
-            tableView.reloadData()
-        }
-    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+ 
+        model = DataModel(callback:myupdate)
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -46,7 +47,12 @@ class TableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return contacts.count > 0 ? contacts.count : 0
+        if let count = contacts?.count
+        {
+            return count
+        }
+        
+        return 0
     }
 
     
@@ -54,8 +60,11 @@ class TableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! TableViewCell
 
         // Configure the cell...
+        if  let contacts = contacts
+        {
         cell.firstName.text = contacts[indexPath.row].givenName
         cell.lastName.text = contacts[indexPath.row].familyName
+        }
         return cell
     }
     
@@ -105,4 +114,10 @@ class TableViewController: UITableViewController {
     }
     */
 
+    func myupdate(contacts:[CNContact])
+    {
+        self.contacts = contacts
+        tableView.reloadData()
+    }
+    
 }
