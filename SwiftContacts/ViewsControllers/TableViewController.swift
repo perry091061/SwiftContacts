@@ -15,12 +15,7 @@ class TableViewController: UITableViewController {
     var model : DataModel!
     var contacts: [CNContact]?
     
-    @IBAction func buttonPressed(_ sender: UIButton) {
-    }
-    
-    
-    
-    
+     
     override func viewDidLoad() {
         super.viewDidLoad()
  
